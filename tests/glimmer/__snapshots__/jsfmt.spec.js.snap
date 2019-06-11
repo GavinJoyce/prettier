@@ -615,6 +615,12 @@ printWidth: 80
 <p>
   {{alex}} Ben {{sophie}}
 </p>
+
+<style>
+  .something {
+    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
+  }
+</style>
 =====================================output=====================================
 <p>
   Your username is @{{name}}
@@ -628,6 +634,11 @@ printWidth: 80
 <p>
   {{alex}} Ben {{sophie}}
 </p>
+<style>
+  .something {
+    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
+  }
+</style>
 ================================================================================
 `;
 
@@ -649,6 +660,12 @@ singleQuote: true
 <p>
   {{alex}} Ben {{sophie}}
 </p>
+
+<style>
+  .something {
+    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
+  }
+</style>
 =====================================output=====================================
 <p>
   Your username is @{{name}}
@@ -662,6 +679,11 @@ singleQuote: true
 <p>
   {{alex}} Ben {{sophie}}
 </p>
+<style>
+  .something {
+    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
+  }
+</style>
 ================================================================================
 `;
 

@@ -92,6 +92,16 @@ function print(path, options, print) {
           ])
         );
 
+        const skipChildren = n.tag === "style";
+        if (skipChildren) {
+          const originalTextRows = options.originalText.split(/\r?\n/);
+          const originalText = originalTextRows.slice( //TODO: extract and make more robust (use col info too)
+            options.locStart(n).line - 1,
+            options.locEnd(n).line + 1
+          );
+          return originalText.join("\n");
+        }
+
       return concat([
         group(
           concat([
