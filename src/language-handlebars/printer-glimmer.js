@@ -227,7 +227,9 @@ function print(path, options, print) {
 
       if (isNextNodeOfType(path, "MustacheStatement")) {
         trailingSpace = " ";
-      } else if (isPreviousNodeOfType(path, "MustacheStatement")) {
+      }
+
+      if (isPreviousNodeOfType(path, "MustacheStatement")) {
         leadingSpace = " ";
       }
 

@@ -611,6 +611,10 @@ printWidth: 80
   {{name}}
   is your name
 </div>
+
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
 =====================================output=====================================
 <p>
   Your username is @{{name}}
@@ -621,6 +625,9 @@ printWidth: 80
 <div>
   {{name}} is your name
 </div>
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
 ================================================================================
 `;
 
@@ -638,6 +645,10 @@ singleQuote: true
   {{name}}
   is your name
 </div>
+
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
 =====================================output=====================================
 <p>
   Your username is @{{name}}
@@ -648,6 +659,9 @@ singleQuote: true
 <div>
   {{name}} is your name
 </div>
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
 ================================================================================
 `;
 
