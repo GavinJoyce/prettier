@@ -8,7 +8,8 @@ const {
   line,
   group,
   indent,
-  ifBreak
+  ifBreak,
+  trim
 } = require("../doc").builders;
 
 // http://w3c.github.io/html/single-page.html#void-elements
@@ -36,20 +37,26 @@ function printChildren(path, options, print) {
   return concat(
     path.map((childPath, childIndex) => {
       const isFirstNode = childIndex === 0;
+      const childNode = childPath.getValue();
 
-      if (
-        isFirstNode ||
-        isPreviousNonWhitespaceNodeOfSomeType(childPath, [
-          "BlockStatement",
-          "ElementNode",
-          "CommentStatement",
-          "MustacheCommentStatement"
-        ])
-      ) {
-        return concat([softline, print(childPath, options, print)]);
+      if (hasPreviousIgnoreComment(childPath) && !isWhitespaceNode(childNode)) {
+        let original = getOriginalNodeValue(childNode, options);
+        return concat([line, original.trimLeft()]);
+      } else {
+        if (
+          isFirstNode ||
+          isPreviousNonWhitespaceNodeOfSomeType(childPath, [
+            "BlockStatement",
+            "ElementNode",
+            "CommentStatement",
+            "MustacheCommentStatement"
+          ])
+        ) {
+          return concat([softline, print(childPath, options, print)]);
+        }
+
+        return print(childPath, options, print);
       }
-
-      return print(childPath, options, print);
     }, "children")
   );
 }
@@ -91,16 +98,6 @@ function print(path, options, print) {
             join(line, path.map(print, "comments"))
           ])
         );
-
-        const skipChildren = n.tag === "style";
-        if (skipChildren) {
-          const originalTextRows = options.originalText.split(/\r?\n/);
-          const originalText = originalTextRows.slice( //TODO: extract and make more robust (use col info too)
-            options.locStart(n).line - 1,
-            options.locEnd(n).line + 1
-          );
-          return originalText.join("\n");
-        }
 
       return concat([
         group(
@@ -498,6 +495,20 @@ function clean(ast, newObj) {
     }
     newObj.chars = ast.chars.replace(/^\s+/, "").replace(/\s+$/, "");
   }
+}
+
+function hasPreviousIgnoreComment(path) {
+  const node = getPreviousNonWhitespaceNode(path);
+  return node && node.type === "MustacheCommentStatement" && node.value.trim().startsWith("prettier-ignore");
+}
+
+function getOriginalNodeValue(node, options) {
+  const originalTextRows = options.originalText.split(/\r?\n/);
+  const originalText = originalTextRows.slice( //TODO: extract and make more robust (use col info too)
+    options.locStart(node).line - 1,
+    options.locEnd(node).line
+  );
+  return originalText.join("\n");
 }
 
 module.exports = {

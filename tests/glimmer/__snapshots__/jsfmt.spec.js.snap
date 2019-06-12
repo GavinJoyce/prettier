@@ -616,11 +616,6 @@ printWidth: 80
   {{alex}} Ben {{sophie}}
 </p>
 
-<style>
-  .something {
-    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
-  }
-</style>
 =====================================output=====================================
 <p>
   Your username is @{{name}}
@@ -634,11 +629,6 @@ printWidth: 80
 <p>
   {{alex}} Ben {{sophie}}
 </p>
-<style>
-  .something {
-    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
-  }
-</style>
 ================================================================================
 `;
 
@@ -661,11 +651,6 @@ singleQuote: true
   {{alex}} Ben {{sophie}}
 </p>
 
-<style>
-  .something {
-    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
-  }
-</style>
 =====================================output=====================================
 <p>
   Your username is @{{name}}
@@ -679,11 +664,6 @@ singleQuote: true
 <p>
   {{alex}} Ben {{sophie}}
 </p>
-<style>
-  .something {
-    color: {{someReallyReallyReallyReallyReallyReallyLongProperty}};
-  }
-</style>
 ================================================================================
 `;
 
@@ -1367,6 +1347,105 @@ singleQuote: true
   b
   c
 {{/if}}
+================================================================================
+`;
+
+exports[`ignore-comment.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+<div>
+  {{!-- prettier-ignore --}}
+  <div>
+
+    this will be ignored
+
+  </div>
+
+  {{!-- prettier-ignore: we can add notes here --}}
+  <div>
+
+    this will also be ignored
+
+  </div>
+
+  <div>
+
+    this won't be ignored
+
+  </div>
+</div>
+
+=====================================output=====================================
+<div>
+  {{! prettier-ignore }}
+  <div>
+
+    this will be ignored
+
+  </div>
+  {{! prettier-ignore: we can add notes here }}
+  <div>
+
+    this will also be ignored
+
+  </div>
+  <div>
+    this won't be ignored
+  </div>
+</div>
+================================================================================
+`;
+
+exports[`ignore-comment.hbs 2`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+singleQuote: true
+                                                                                | printWidth
+=====================================input======================================
+<div>
+  {{!-- prettier-ignore --}}
+  <div>
+
+    this will be ignored
+
+  </div>
+
+  {{!-- prettier-ignore: we can add notes here --}}
+  <div>
+
+    this will also be ignored
+
+  </div>
+
+  <div>
+
+    this won't be ignored
+
+  </div>
+</div>
+
+=====================================output=====================================
+<div>
+  {{! prettier-ignore }}
+  <div>
+
+    this will be ignored
+
+  </div>
+  {{! prettier-ignore: we can add notes here }}
+  <div>
+
+    this will also be ignored
+
+  </div>
+  <div>
+    this won't be ignored
+  </div>
+</div>
 ================================================================================
 `;
 
