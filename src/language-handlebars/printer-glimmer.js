@@ -120,6 +120,9 @@ function print(path, options, print) {
       ]);
     }
     case "BlockStatement": {
+      let original = getOriginalNodeValue(n, options);
+      // console.log('OROG', original);
+      // console.log('BlockStatement', original)
       if (hasPreviousIgnoreComment(path)) {
         let original = getOriginalNodeValue(n, options);
         return concat([original.trim()]);
@@ -172,16 +175,22 @@ function print(path, options, print) {
     }
     case "ElementModifierStatement":
     case "MustacheStatement": {
+      let original = getOriginalNodeValue(n, options);
+      // console.log('OROG', original);
       const pp = path.getParentNode(1);
       const isConcat = pp && pp.type === "ConcatStatement";
+      const isClassAttribute = pp && pp.type === "AttrNode" && pp.name === "class";
+      // console.log('MUSTACHE', isConcat, isClassAttribute, { parent: pp.type, pp}, original)
+
       return group(
         concat([
           n.escaped === false ? "{{{" : "{{",
-          printPathParams(path, print),
-          isConcat ? "" : softline,
+          printPathParams(path, print), //braks are coming from here..log.
+          isConcat || isClassAttribute ? "" : softline,
           n.escaped === false ? "}}}" : "}}"
         ])
       );
+      // , { shouldBreak: !isClassAttribute }); //TODO: needed?
     }
     case "SubExpression": {
       const params = getParams(path, print);
@@ -202,18 +211,21 @@ function print(path, options, print) {
       return concat([n.name, "=", quote, path.call(print, "value"), quote]);
     }
     case "ConcatStatement": {
+      let original = getOriginalNodeValue(n, options);
+      // console.log('ConcatStatement', original);
       return concat([
         '"',
         group(
           indent(
             join(
-              softline,
+              "",
               path
-                .map(partPath => print(partPath), "parts")
+                .map(partPath => concat([print(partPath)]), "parts") //print(partPath) is adding the breaks
                 .filter(a => a !== "")
             )
           )
         ),
+        // , { shouldBreak: false }),
         '"'
       ]);
     }
@@ -371,7 +383,10 @@ function printPathParams(path, print) {
   parts.push(printPath(path, print));
   parts = parts.concat(getParams(path, print));
 
-  return indent(group(join(line, parts)));
+  // console.log('PARTS', parts);
+
+  // return indent(group(join(line, parts)));
+  return join(" ", parts); //TODO: gj: perhaps have a simple mode?
 }
 
 function printBlockParams(path) {
