@@ -66,6 +66,14 @@ function print(path, options, print) {
 
   switch (n.type) {
     case "Program": {
+      debugger;
+
+      let firstChild = n.body[0];
+      if (firstChild && isIgnoreFileComment(firstChild)) {
+        let original = getOriginalNodeValue(n, options);
+        return concat([original.trim()]);
+      }
+
       return group(
         join(softline, path.map(print, "body").filter(text => text !== ""))
       );
@@ -546,6 +554,14 @@ function isWithinIgnoreRegion(path) {
 
 function isMustacheCommentStatement(node) {
   return node && node.type === "MustacheCommentStatement";
+}
+
+function isIgnoreFileComment(node) {
+  if (isMustacheCommentStatement(node)) {
+    const value = node.value.trim();
+    return value.startsWith("prettier-ignore-file");
+  }
+  return false;
 }
 
 function getOriginalNodeValue(node, options) {

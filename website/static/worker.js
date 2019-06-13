@@ -163,7 +163,7 @@ function handleMessage(message) {
       supportInfo: JSON.parse(
         JSON.stringify(
           prettier.getSupportInfo(null, {
-            showUnreleased: /-pr\./.test(prettier.version)
+            showUnreleased: true // enable glimmer
           })
         )
       ),

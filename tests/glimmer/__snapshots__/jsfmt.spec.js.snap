@@ -1565,6 +1565,87 @@ singleQuote: true
 ================================================================================
 `;
 
+exports[`ignore-file-comment.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
+=====================================output=====================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
+================================================================================
+`;
+
+exports[`ignore-file-comment.hbs 2`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+singleQuote: true
+                                                                                | printWidth
+=====================================input======================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
+=====================================output=====================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
+================================================================================
+`;
+
 exports[`literals.hbs 1`] = `
 ====================================options=====================================
 parsers: ["glimmer"]
