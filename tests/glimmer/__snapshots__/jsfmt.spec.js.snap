@@ -1364,20 +1364,34 @@ printWidth: 80
 
   </div>
 
-  {{!-- prettier-ignore: we can add notes here --}}
   <div>
 
-    this will also be ignored
-
-  </div>
-
-  <div>
-
-    this won't be ignored
+    this will not be ignored
 
   </div>
 </div>
 
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
 =====================================output=====================================
 <div>
   {{! prettier-ignore }}
@@ -1386,15 +1400,29 @@ printWidth: 80
     this will be ignored
 
   </div>
-  {{! prettier-ignore: we can add notes here }}
   <div>
-
-    this will also be ignored
-
+    this will not be ignored
   </div>
-  <div>
-    this won't be ignored
-  </div>
+</div>
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
 </div>
 ================================================================================
 `;
@@ -1414,20 +1442,34 @@ singleQuote: true
 
   </div>
 
-  {{!-- prettier-ignore: we can add notes here --}}
   <div>
 
-    this will also be ignored
-
-  </div>
-
-  <div>
-
-    this won't be ignored
+    this will not be ignored
 
   </div>
 </div>
 
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
 =====================================output=====================================
 <div>
   {{! prettier-ignore }}
@@ -1436,15 +1478,29 @@ singleQuote: true
     this will be ignored
 
   </div>
-  {{! prettier-ignore: we can add notes here }}
   <div>
-
-    this will also be ignored
-
+    this will not be ignored
   </div>
-  <div>
-    this won't be ignored
-  </div>
+</div>
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
 </div>
 ================================================================================
 `;

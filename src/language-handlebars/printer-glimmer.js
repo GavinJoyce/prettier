@@ -39,24 +39,19 @@ function printChildren(path, options, print) {
       const isFirstNode = childIndex === 0;
       const childNode = childPath.getValue();
 
-      if (hasPreviousIgnoreComment(childPath) && !isWhitespaceNode(childNode)) {
-        let original = getOriginalNodeValue(childNode, options);
-        return concat([line, original.trimLeft()]);
-      } else {
-        if (
-          isFirstNode ||
-          isPreviousNonWhitespaceNodeOfSomeType(childPath, [
-            "BlockStatement",
-            "ElementNode",
-            "CommentStatement",
-            "MustacheCommentStatement"
-          ])
-        ) {
-          return concat([softline, print(childPath, options, print)]);
-        }
-
-        return print(childPath, options, print);
+      if (
+        isFirstNode ||
+        isPreviousNonWhitespaceNodeOfSomeType(childPath, [
+          "BlockStatement",
+          "ElementNode",
+          "CommentStatement",
+          "MustacheCommentStatement"
+        ])
+      ) {
+        return concat([softline, print(childPath, options, print)]);
       }
+
+      return print(childPath, options, print);
     }, "children")
   );
 }
@@ -76,6 +71,11 @@ function print(path, options, print) {
       );
     }
     case "ElementNode": {
+      if (hasPreviousIgnoreComment(path)) {
+        let original = getOriginalNodeValue(n, options);
+        return concat([original.trim()]);
+      }
+
       const tagFirstChar = n.tag[0];
       const isLocal = n.tag.indexOf(".") !== -1;
       const isGlimmerComponent =
@@ -120,6 +120,10 @@ function print(path, options, print) {
       ]);
     }
     case "BlockStatement": {
+      if (hasPreviousIgnoreComment(path)) {
+        let original = getOriginalNodeValue(n, options);
+        return concat([original.trim()]);
+      }
       const pp = path.getParentNode(1);
       const isElseIf =
         pp &&
@@ -460,14 +464,16 @@ function isPreviousNonWhitespaceNodeOfSomeType(path, types) {
 function getPreviousNonWhitespaceNode(path) {
   const node = path.getValue();
   const parentNode = path.getParentNode(0);
+  const children = parentNode.children || parentNode.body;
 
-  const children = parentNode.children;
-  const nonWhitespaceChildren = children.filter(c => !isWhitespaceNode(c));
-  if (nonWhitespaceChildren) {
-    const nodeIndex = nonWhitespaceChildren.indexOf(node);
-    if (nodeIndex > 0) {
-      const previousNode = nonWhitespaceChildren[nodeIndex - 1];
-      return previousNode;
+  if (children) {
+    const nonWhitespaceChildren = children.filter(c => !isWhitespaceNode(c));
+    if (nonWhitespaceChildren) {
+      const nodeIndex = nonWhitespaceChildren.indexOf(node);
+      if (nodeIndex > 0) {
+        const previousNode = nonWhitespaceChildren[nodeIndex - 1];
+        return previousNode;
+      }
     }
   }
 }

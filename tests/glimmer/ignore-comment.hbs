@@ -6,16 +6,31 @@
 
   </div>
 
-  {{!-- prettier-ignore: we can add notes here --}}
   <div>
 
-    this will also be ignored
+    this will not be ignored
 
   </div>
+</div>
 
-  <div>
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
 
-    this won't be ignored
+      This will be ignored
 
-  </div>
+    </div>
+  {{/if}}
+</div>
+
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
 </div>
