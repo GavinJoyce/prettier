@@ -174,11 +174,12 @@ function print(path, options, print) {
     case "MustacheStatement": {
       const pp = path.getParentNode(1);
       const isConcat = pp && pp.type === "ConcatStatement";
+      const isClassAttribute = pp && pp.type === "AttrNode" && pp.name === "class";
       return group(
         concat([
           n.escaped === false ? "{{{" : "{{",
-          printPathParams(path, print),
-          isConcat ? "" : softline,
+          printPathParams(path, print, isClassAttribute),
+          isConcat || isClassAttribute ? "" : softline,
           n.escaped === false ? "}}}" : "}}"
         ])
       );
@@ -207,7 +208,7 @@ function print(path, options, print) {
         group(
           indent(
             join(
-              softline,
+              "",
               path
                 .map(partPath => print(partPath), "parts")
                 .filter(a => a !== "")
@@ -365,13 +366,17 @@ function getParams(path, print) {
   return parts;
 }
 
-function printPathParams(path, print) {
+function printPathParams(path, print, dontBreak) {
   let parts = [];
 
   parts.push(printPath(path, print));
   parts = parts.concat(getParams(path, print));
 
-  return indent(group(join(line, parts)));
+  if (dontBreak) {
+    return join(" ", parts);
+  } else {
+    return indent(group(join(line, parts)));
+  }
 }
 
 function printBlockParams(path) {
