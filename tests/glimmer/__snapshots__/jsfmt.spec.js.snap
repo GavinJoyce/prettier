@@ -1374,6 +1374,28 @@ printWidth: 80
     </div>
   {{/if}}
 </div>
+
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+
+  <div>
+
+    this will not be ignored
+
+  </div>
+</div>
 =====================================output=====================================
 <div>
   {{! prettier-ignore }}
@@ -1405,6 +1427,23 @@ printWidth: 80
 
     </div>
   {{/if}}
+</div>
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+  <div>
+    this will not be ignored
+  </div>
 </div>
 ================================================================================
 `;
@@ -1452,6 +1491,28 @@ singleQuote: true
     </div>
   {{/if}}
 </div>
+
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+
+  <div>
+
+    this will not be ignored
+
+  </div>
+</div>
 =====================================output=====================================
 <div>
   {{! prettier-ignore }}
@@ -1483,6 +1544,23 @@ singleQuote: true
 
     </div>
   {{/if}}
+</div>
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+  <div>
+    this will not be ignored
+  </div>
 </div>
 ================================================================================
 `;

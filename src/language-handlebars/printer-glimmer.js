@@ -71,7 +71,7 @@ function print(path, options, print) {
       );
     }
     case "ElementNode": {
-      if (hasPreviousIgnoreComment(path)) {
+      if (shouldIgnore(path)) {
         let original = getOriginalNodeValue(n, options);
         return concat([original.trim()]);
       }
@@ -120,7 +120,7 @@ function print(path, options, print) {
       ]);
     }
     case "BlockStatement": {
-      if (hasPreviousIgnoreComment(path)) {
+      if (shouldIgnore(path)) {
         let original = getOriginalNodeValue(n, options);
         return concat([original.trim()]);
       }
@@ -412,6 +412,11 @@ function isSingleLineWhitespaceNode(node) {
 }
 
 function getPreviousNode(path) {
+  let previousSiblingNodes = getPreviousSiblingNodes(path);
+  return previousSiblingNodes[previousSiblingNodes.length - 1];
+}
+
+function getPreviousSiblingNodes(path) {
   const node = path.getValue();
   const parentNode = path.getParentNode(0);
 
@@ -419,10 +424,11 @@ function getPreviousNode(path) {
   if (children) {
     const nodeIndex = children.indexOf(node);
     if (nodeIndex > 0) {
-      const previousNode = children[nodeIndex - 1];
-      return previousNode;
+      return children.slice(0, nodeIndex);
     }
   }
+
+  return [];
 }
 
 function getNextNode(path) {
@@ -508,9 +514,38 @@ function clean(ast, newObj) {
   }
 }
 
+function shouldIgnore(path) {
+  return hasPreviousIgnoreComment(path) || isWithinIgnoreRegion(path);
+}
+
 function hasPreviousIgnoreComment(path) {
   const node = getPreviousNonWhitespaceNode(path);
-  return node && node.type === "MustacheCommentStatement" && node.value.trim().startsWith("prettier-ignore");
+
+  if (isMustacheCommentStatement(node)) {
+    const value = node.value.trim();
+    return value.startsWith("prettier-ignore") && !value.startsWith("prettier-ignore-");
+  }
+}
+
+function isWithinIgnoreRegion(path) {
+  let previousSiblingNodes = getPreviousSiblingNodes(path);
+
+  for (let i = previousSiblingNodes.length-1; i >= 0; i--) {
+    let node = previousSiblingNodes[i];
+
+    if (isMustacheCommentStatement(node)) {
+      const value = node.value.trim();
+      if (value.startsWith("prettier-ignore-start")) {
+        return true;
+      } else if (value.startsWith("prettier-ignore-end")) {
+        return false;
+      }
+    }
+  }
+}
+
+function isMustacheCommentStatement(node) {
+  return node && node.type === "MustacheCommentStatement";
 }
 
 function getOriginalNodeValue(node, options) {
