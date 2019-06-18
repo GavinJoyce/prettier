@@ -119,7 +119,11 @@ printWidth: 80
 }}
   Hello
 {{/block}}
-{{#block}}{{#block}}hello{{/block}}{{/block}}
+{{#block}}
+  {{#block}}
+    hello
+  {{/block}}
+{{/block}}
 {{#block}}
   {{#block param}}
     hello
@@ -130,13 +134,14 @@ printWidth: 80
     hello
   {{/block}}
 {{/block}}
-{{#block}}hello{{/block}}
+{{#block}}
+  hello
+{{/block}}
 <MyComponent as |firstName|>
   {{firstName}}
 </MyComponent>
 <MyComponent as |firstName lastName|>
-  {{firstName}}
-  {{lastName}}
+  {{firstName}} {{lastName}}
 </MyComponent>
 ================================================================================
 `;
@@ -261,7 +266,11 @@ singleQuote: true
 }}
   Hello
 {{/block}}
-{{#block}}{{#block}}hello{{/block}}{{/block}}
+{{#block}}
+  {{#block}}
+    hello
+  {{/block}}
+{{/block}}
 {{#block}}
   {{#block param}}
     hello
@@ -272,14 +281,78 @@ singleQuote: true
     hello
   {{/block}}
 {{/block}}
-{{#block}}hello{{/block}}
+{{#block}}
+  hello
+{{/block}}
 <MyComponent as |firstName|>
   {{firstName}}
 </MyComponent>
 <MyComponent as |firstName lastName|>
-  {{firstName}}
-  {{lastName}}
+  {{firstName}} {{lastName}}
 </MyComponent>
+================================================================================
+`;
+
+exports[`comment.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+<div>
+  {{!-- Foo --}}
+  {{#if @foo}}
+    Foo
+  {{/if}}
+
+  {{!-- Bar --}}
+  {{#if @bar}}
+    Bar
+  {{/if}}
+</div>
+=====================================output=====================================
+<div>
+  {{! Foo }}
+  {{#if @foo}}
+    Foo
+  {{/if}}
+  {{! Bar }}
+  {{#if @bar}}
+    Bar
+  {{/if}}
+</div>
+================================================================================
+`;
+
+exports[`comment.hbs 2`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+singleQuote: true
+                                                                                | printWidth
+=====================================input======================================
+<div>
+  {{!-- Foo --}}
+  {{#if @foo}}
+    Foo
+  {{/if}}
+
+  {{!-- Bar --}}
+  {{#if @bar}}
+    Bar
+  {{/if}}
+</div>
+=====================================output=====================================
+<div>
+  {{! Foo }}
+  {{#if @foo}}
+    Foo
+  {{/if}}
+  {{! Bar }}
+  {{#if @bar}}
+    Bar
+  {{/if}}
+</div>
 ================================================================================
 `;
 
@@ -439,16 +512,7 @@ printWidth: 80
   Hello
 </div>
 <div
-  class="hello
-    {{if goodbye true}}
-
-    {{if goodbye false}}
-
-    {{if goodbye true}}
-
-    {{if goodbye false}}
-
-    {{if goodbye true}}"
+  class="hello {{if goodbye true}} {{if goodbye false}} {{if goodbye true}} {{if goodbye false}} {{if goodbye true}}"
 >
   Hello
 </div>
@@ -498,16 +562,7 @@ singleQuote: true
   Hello
 </div>
 <div
-  class="hello
-    {{if goodbye true}}
-
-    {{if goodbye false}}
-
-    {{if goodbye true}}
-
-    {{if goodbye false}}
-
-    {{if goodbye true}}"
+  class="hello {{if goodbye true}} {{if goodbye false}} {{if goodbye true}} {{if goodbye false}} {{if goodbye true}}"
 >
   Hello
 </div>
@@ -522,6 +577,75 @@ singleQuote: true
 <div class="class-k {{myClass}} class-l"></div>
 <div class="class-m {{myClass}} class-n {{myClass}}class-o"></div>
 <div class="class-p  class-q"></div>
+================================================================================
+`;
+
+exports[`curly.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+<p>Your username is @{{name}}</p>
+<p>Hi {{firstName}} {{lastName}}</p>
+
+<div>
+  {{name}}
+  is your name
+</div>
+
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
+
+=====================================output=====================================
+<p>
+  Your username is @{{name}}
+</p>
+<p>
+  Hi {{firstName}} {{lastName}}
+</p>
+<div>
+  {{name}} is your name
+</div>
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
+================================================================================
+`;
+
+exports[`curly.hbs 2`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+singleQuote: true
+                                                                                | printWidth
+=====================================input======================================
+<p>Your username is @{{name}}</p>
+<p>Hi {{firstName}} {{lastName}}</p>
+
+<div>
+  {{name}}
+  is your name
+</div>
+
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
+
+=====================================output=====================================
+<p>
+  Your username is @{{name}}
+</p>
+<p>
+  Hi {{firstName}} {{lastName}}
+</p>
+<div>
+  {{name}} is your name
+</div>
+<p>
+  {{alex}} Ben {{sophie}}
+</p>
 ================================================================================
 `;
 
@@ -715,6 +839,13 @@ printWidth: 80
 <div></div>
 <img />
 
+<p>
+  a <br /> b
+</p>
+
+<p>
+  a {{foo}} b
+</p>
 =====================================output=====================================
 <div class="attribute" {{modifier}} {{! comment}}>
   Hello
@@ -735,13 +866,22 @@ printWidth: 80
   A long enough string to trigger a line break that would prevent wrapping more and more.
 </div>
 <div>
-  {{#block}}{{hello}}{{/block}}
+  {{#block}}
+    {{hello}}
+  {{/block}}
 </div>
 <div>
   {{hello}}
 </div>
 <div></div>
 <img />
+<p>
+  a <br />
+  b
+</p>
+<p>
+  a {{foo}} b
+</p>
 ================================================================================
 `;
 
@@ -789,6 +929,13 @@ singleQuote: true
 <div></div>
 <img />
 
+<p>
+  a <br /> b
+</p>
+
+<p>
+  a {{foo}} b
+</p>
 =====================================output=====================================
 <div class="attribute" {{modifier}} {{! comment}}>
   Hello
@@ -809,13 +956,22 @@ singleQuote: true
   A long enough string to trigger a line break that would prevent wrapping more and more.
 </div>
 <div>
-  {{#block}}{{hello}}{{/block}}
+  {{#block}}
+    {{hello}}
+  {{/block}}
 </div>
 <div>
   {{hello}}
 </div>
 <div></div>
 <img />
+<p>
+  a <br />
+  b
+</p>
+<p>
+  a {{foo}} b
+</p>
 ================================================================================
 `;
 
@@ -1173,6 +1329,320 @@ singleQuote: true
   b
   c
 {{/if}}
+================================================================================
+`;
+
+exports[`ignore-comment.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+<div>
+  {{!-- prettier-ignore --}}
+  <div>
+
+    this will be ignored
+
+  </div>
+
+  <div>
+
+    this will not be ignored
+
+  </div>
+</div>
+
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+
+  <div>
+
+    this will not be ignored
+
+  </div>
+</div>
+=====================================output=====================================
+<div>
+  {{! prettier-ignore }}
+  <div>
+
+    this will be ignored
+
+  </div>
+  <div>
+    this will not be ignored
+  </div>
+</div>
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+  <div>
+    this will not be ignored
+  </div>
+</div>
+================================================================================
+`;
+
+exports[`ignore-comment.hbs 2`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+singleQuote: true
+                                                                                | printWidth
+=====================================input======================================
+<div>
+  {{!-- prettier-ignore --}}
+  <div>
+
+    this will be ignored
+
+  </div>
+
+  <div>
+
+    this will not be ignored
+
+  </div>
+</div>
+
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+
+  <div>
+
+    this will not be ignored
+
+  </div>
+</div>
+=====================================output=====================================
+<div>
+  {{! prettier-ignore }}
+  <div>
+
+    this will be ignored
+
+  </div>
+  <div>
+    this will not be ignored
+  </div>
+</div>
+<div>
+  {{#if this.foo}}
+    {{! prettier-ignore: we can ignore within a block }}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+<div>
+  {{! prettier-ignore: we can ignore blocks }}
+  {{#if this.foo}}
+    <div>
+
+      This will be ignored
+
+    </div>
+  {{/if}}
+</div>
+<div>
+  {{! prettier-ignore-start }}
+  <div>
+
+    This will be ignored
+
+  </div>
+  <div>
+
+    This will be ignored
+
+  </div>
+  {{! prettier-ignore-end }}
+  <div>
+    this will not be ignored
+  </div>
+</div>
+================================================================================
+`;
+
+exports[`ignore-file-comment.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
+=====================================output=====================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
+================================================================================
+`;
+
+exports[`ignore-file-comment.hbs 2`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+singleQuote: true
+                                                                                | printWidth
+=====================================input======================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
+=====================================output=====================================
+{{! prettier-ignore-file (this will ingore the whole file) }}
+<div>
+
+  This will be ignored
+
+</div>
+
+
+
+
+<div>
+
+  The whole file will be
+
+</div>
 ================================================================================
 `;
 
