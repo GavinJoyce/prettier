@@ -65,9 +65,9 @@ function print(path, options, print) {
   }
 
   switch (n.type) {
-    case "Program": {
-      debugger;
-
+    case "Block":
+    case "Program":
+    case "Template": {
       let firstChild = n.body[0];
       if (firstChild && isIgnoreFileComment(firstChild)) {
         let original = getOriginalNodeValue(n, options);
