@@ -283,8 +283,7 @@ function print(path, options, print) {
         .replace(/\s+$/, trailingSpace);
     }
     case "MustacheCommentStatement": {
-      const dashes = n.value.indexOf("}}") > -1 ? "--" : "";
-      return concat(["{{!", dashes, n.value, dashes, "}}"]);
+      return concat(["{{!--", n.value, "--}}"]);
     }
     case "PathExpression": {
       return n.original;
