@@ -1,6 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`text.hbs 1`] = `
+exports[`simple-srapping-text.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+aaaaaa bbbbbbb ccccccc dddddd eeeeee ffffff gggggg hhhhh iiiiii jjjjj kkkkkk llllll mmmmm
+=====================================output=====================================
+aaaaaa bbbbbbb ccccccc dddddd eeeeee ffffff gggggg hhhhh iiiiii jjjjj kkkkkk
+llllll mmmmm
+
+================================================================================
+`;
+
+exports[`simple-text.hbs 1`] = `
 ====================================options=====================================
 parsers: ["glimmer"]
 printWidth: 80
