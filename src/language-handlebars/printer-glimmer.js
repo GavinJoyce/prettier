@@ -43,11 +43,22 @@ function print(path, options, print) {
       const isVoid = voidTags.includes(node.tag);
       const lineType = hardline;
 
+      const getParams = (path, print) => {
+        return indent(
+          concat([
+            node.attributes.length ? line : "",
+            join(line, path.map(print, "attributes"))
+          ])
+        );
+      }
+
+      const params = getParams(path, print);
+
       if (isVoid) {
-        return group(concat(["<", node.tag, " />"]));
+        return group(concat(["<", node.tag, params, " />"]));
       } else {
         return concat([
-          group(concat(["<", node.tag, ">"])),
+          group(concat(["<", node.tag, params, ">"])),
           group(
             concat([
               indent(concat([lineType, printChildren(path, options, print)])),
@@ -69,7 +80,12 @@ function print(path, options, print) {
       return "[SubExpression]";
     }
     case "AttrNode": {
-      return "[AttrNode]";
+      const isText = node.value.type === "TextNode";
+      if (isText && node.value.loc.start.column === node.value.loc.end.column) {
+        return concat([node.name]);
+      }
+      const quote = isText ? '"' : "";
+      return concat([node.name, "=", quote, path.call(print, "value"), quote]);
     }
     case "ConcatStatement": {
       return "[ConcatStatement]";
