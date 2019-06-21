@@ -46,20 +46,6 @@ printWidth: 80
 ================================================================================
 `;
 
-exports[`simple-srapping-text.hbs 1`] = `
-====================================options=====================================
-parsers: ["glimmer"]
-printWidth: 80
-                                                                                | printWidth
-=====================================input======================================
-aaaaaa bbbbbbb ccccccc dddddd eeeeee ffffff gggggg hhhhh iiiiii jjjjj kkkkkk llllll mmmmm
-=====================================output=====================================
-aaaaaa bbbbbbb ccccccc dddddd eeeeee ffffff gggggg hhhhh iiiiii jjjjj kkkkkk
-llllll mmmmm
-
-================================================================================
-`;
-
 exports[`simple-text.hbs 1`] = `
 ====================================options=====================================
 parsers: ["glimmer"]
@@ -73,6 +59,20 @@ a b c
 1  2      3
 =====================================output=====================================
 hello a b c 1 2 3
+
+================================================================================
+`;
+
+exports[`simple-wrapping-text.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+aaaaaa bbbbbbb ccccccc dddddd eeeeee ffffff gggggg hhhhh iiiiii jjjjj kkkkkk llllll mmmmm
+=====================================output=====================================
+aaaaaa bbbbbbb ccccccc dddddd eeeeee ffffff gggggg hhhhh iiiiii jjjjj kkkkkk
+llllll mmmmm
 
 ================================================================================
 `;
