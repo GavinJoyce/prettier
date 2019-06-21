@@ -50,7 +50,7 @@ function print(path, options, print) {
             join(line, path.map(print, "attributes"))
           ])
         );
-      }
+      };
 
       const params = getParams(path, print);
 
@@ -72,9 +72,16 @@ function print(path, options, print) {
     case "BlockStatement": {
       return "[BlockStatement]";
     }
-    case "ElementModifierStatement":
+    // case "ElementModifierStatement":
     case "MustacheStatement": {
-      return "[ElementModifierStatement|MustacheStatement]";
+      return group(
+        concat([
+          node.escaped === false ? "{{{" : "{{",
+          path.call(print, "path"),
+          softline,
+          node.escaped === false ? "}}}" : "}}"
+        ])
+      );
     }
     case "SubExpression": {
       return "[SubExpression]";
@@ -100,13 +107,24 @@ function print(path, options, print) {
       let parts = splitByWhitespaceAndTrim(node.chars);
       parts = injectLines(parts);
 
+      const startsWithWhiteSpace = /^\s/.test(node.chars);
+      const endsWithWhiteSpace = /\s$/.test(node.chars);
+
+      if (startsWithWhiteSpace) {
+        parts.unshift(line);
+      }
+
+      if (endsWithWhiteSpace) {
+        parts.push(line);
+      }
+
       return group(fill(parts));
     }
     case "MustacheCommentStatement": {
       return "[MustacheCommentStatement]";
     }
     case "PathExpression": {
-      return "[PathExpression]";
+      return node.original;
     }
     case "BooleanLiteral": {
       return "[BooleanLiteral]";
