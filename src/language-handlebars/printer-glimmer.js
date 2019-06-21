@@ -50,7 +50,10 @@ function print(path, options, print) {
     case "Block":
     case "Program":
     case "Template": {
-      return printChildren(path, options, print, "body");
+      return concat([
+        printChildren(path, options, print, "body"),
+        hardline
+      ]);
     }
     case "ElementNode": {
       return "[ELEMENT]"
@@ -78,27 +81,14 @@ function print(path, options, print) {
       return "[HashPair]";
     }
     case "TextNode": {
-      let parts = node.chars.split(" ");
-      parts = parts.filter(part => part); //remove blank strings
-
-      let newParts = [];
-      for(let i=0; i<parts.length; i++) {
-        if (i !== 0) {
-          newParts.push(line);
-        }
-        newParts.push(parts[i]);
-      }
+      let parts = splitByWhitespaceAndTrim(node.chars);
+      parts = injectLines(parts);
 
       return group(
         fill(
-          newParts
+          parts
         )
       );
-
-      return parts.join("-");
-
-      return node.chars;
-      // return "[TextNode]";
     }
     case "MustacheCommentStatement": {
       return "[MustacheCommentStatement]";
@@ -140,6 +130,22 @@ function printChildren(path, options, print, key = "children") {
       }, key)
     )
   );
+}
+
+function splitByWhitespaceAndTrim(text) {
+  return text.replace(/^\s+/,"").replace(/\s+$/,"").split(/\s+/);
+}
+
+function injectLines(items) {
+  let newItems = [];
+  for(let i=0; i<items.length; i++) {
+    if (i !== 0) {
+      newItems.push(line);
+    }
+    newItems.push(items[i]);
+  }
+
+  return newItems;
 }
 
 module.exports = {
