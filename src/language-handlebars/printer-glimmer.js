@@ -8,8 +8,40 @@ const {
   line,
   group,
   indent,
-  ifBreak
+  ifBreak,
+  fill
 } = require("../doc").builders;
+
+function testGroup() {
+  return group(
+    concat([
+      "111",
+      " ",
+      fill(
+        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
+      ),
+      " ",
+      fill(
+        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
+      ),
+      " ",
+      fill(
+        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
+      ),
+      " ",
+      fill(
+        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
+      ),
+      " ",
+      fill(
+        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
+      ),
+      " ",
+      "222"
+    ])
+  );
+
+}
 
 function print(path, options, print) {
   const node = path.getValue();
@@ -18,7 +50,7 @@ function print(path, options, print) {
     case "Block":
     case "Program":
     case "Template": {
-      return "[Block|Program|Template]";
+      return printChildren(path, options, print, "body");
     }
     case "ElementNode": {
       return "[ELEMENT]"
@@ -46,7 +78,27 @@ function print(path, options, print) {
       return "[HashPair]";
     }
     case "TextNode": {
-      return "[TextNode]";
+      let parts = node.chars.split(" ");
+      parts = parts.filter(part => part); //remove blank strings
+
+      let newParts = [];
+      for(let i=0; i<parts.length; i++) {
+        if (i !== 0) {
+          newParts.push(line);
+        }
+        newParts.push(parts[i]);
+      }
+
+      return group(
+        fill(
+          newParts
+        )
+      );
+
+      return parts.join("-");
+
+      return node.chars;
+      // return "[TextNode]";
     }
     case "MustacheCommentStatement": {
       return "[MustacheCommentStatement]";
@@ -79,11 +131,14 @@ function print(path, options, print) {
   }
 }
 
-function printChildren(path, options, print) {
-  return concat(
-    path.map((childPath, _childIndex) => {
-      return print(childPath, options, print);
-    }, "children")
+function printChildren(path, options, print, key = "children") {
+  return group(
+    join(
+      softline,
+      path.map((childPath, _childIndex) => {
+        return print(childPath, options, print);
+      }, key)
+    )
   );
 }
 
