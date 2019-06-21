@@ -22,12 +22,14 @@ function print(path, options, print) {
       return concat([printChildren(path, options, print, "body"), hardline]);
     }
     case "ElementNode": {
+      const lineType = hardline;
+
       return concat([
         group(concat(["<", node.tag, ">"])),
         group(
           concat([
-            indent(concat([softline, printChildren(path, options, print)])),
-            softline,
+            indent(concat([lineType, printChildren(path, options, print)])),
+            lineType,
             concat(["</", node.tag, ">"])
           ])
         )
