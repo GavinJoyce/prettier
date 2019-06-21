@@ -12,37 +12,6 @@ const {
   fill
 } = require("../doc").builders;
 
-function testGroup() {
-  return group(
-    concat([
-      "111",
-      " ",
-      fill(
-        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
-      ),
-      " ",
-      fill(
-        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
-      ),
-      " ",
-      fill(
-        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
-      ),
-      " ",
-      fill(
-        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
-      ),
-      " ",
-      fill(
-        ["aaa", line, "bbb", line, "ccc", line, "ddd"]
-      ),
-      " ",
-      "222"
-    ])
-  );
-
-}
-
 function print(path, options, print) {
   const node = path.getValue();
 
@@ -50,16 +19,22 @@ function print(path, options, print) {
     case "Block":
     case "Program":
     case "Template": {
-      return concat([
-        printChildren(path, options, print, "body"),
-        hardline
-      ]);
+      return concat([printChildren(path, options, print, "body"), hardline]);
     }
     case "ElementNode": {
-      return "[ELEMENT]"
+      return concat([
+        group(concat(["<", node.tag, ">"])),
+        group(
+          concat([
+            indent(concat([softline, printChildren(path, options, print)])),
+            softline,
+            concat(["</", node.tag, ">"])
+          ])
+        )
+      ]);
     }
     case "BlockStatement": {
-     return "[BlockStatement]";
+      return "[BlockStatement]";
     }
     case "ElementModifierStatement":
     case "MustacheStatement": {
@@ -69,7 +44,7 @@ function print(path, options, print) {
       return "[SubExpression]";
     }
     case "AttrNode": {
-      return "[AttrNode]"
+      return "[AttrNode]";
     }
     case "ConcatStatement": {
       return "[ConcatStatement]";
@@ -84,11 +59,7 @@ function print(path, options, print) {
       let parts = splitByWhitespaceAndTrim(node.chars);
       parts = injectLines(parts);
 
-      return group(
-        fill(
-          parts
-        )
-      );
+      return group(fill(parts));
     }
     case "MustacheCommentStatement": {
       return "[MustacheCommentStatement]";
@@ -133,12 +104,15 @@ function printChildren(path, options, print, key = "children") {
 }
 
 function splitByWhitespaceAndTrim(text) {
-  return text.replace(/^\s+/,"").replace(/\s+$/,"").split(/\s+/);
+  return text
+    .replace(/^\s+/, "")
+    .replace(/\s+$/, "")
+    .split(/\s+/);
 }
 
 function injectLines(items) {
   let newItems = [];
-  for(let i=0; i<items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     if (i !== 0) {
       newItems.push(line);
     }

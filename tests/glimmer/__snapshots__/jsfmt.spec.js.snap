@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`simple-elements.hbs 1`] = `
+====================================options=====================================
+parsers: ["glimmer"]
+printWidth: 80
+                                                                                | printWidth
+=====================================input======================================
+<p>this is short, so it's on a single line</p>
+
+<p>this is longer, so it breaks into multiple lines. this is longer, so it breaks into multiple lines.</p>
+=====================================output=====================================
+<p>this is short, so it's on a single line</p>
+
+<p>
+  this is longer, so it breaks into multiple lines. this is longer, so it breaks
+  into multiple lines.
+</p>
+
+================================================================================
+`;
+
 exports[`simple-srapping-text.hbs 1`] = `
 ====================================options=====================================
 parsers: ["glimmer"]
