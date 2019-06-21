@@ -11,6 +11,8 @@ printWidth: 80
 <p>aaaa bbbb cccc dddd eeee ffff gggg hhhh iiii jjjj kkkk llll mmmm nnnn oooo pppp qqqq rrrr ssss tttt</p>
 
 <div>111<p>222</p></div>
+
+<br /><br />
 =====================================output=====================================
 <p>
   aaa
@@ -27,6 +29,9 @@ printWidth: 80
     222
   </p>
 </div>
+
+<br />
+<br />
 
 ================================================================================
 `;

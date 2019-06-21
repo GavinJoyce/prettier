@@ -12,6 +12,24 @@ const {
   fill
 } = require("../doc").builders;
 
+// http://w3c.github.io/html/single-page.html#void-elements
+const voidTags = [
+  "area",
+  "base",
+  "br",
+  "col",
+  "embed",
+  "hr",
+  "img",
+  "input",
+  "link",
+  "meta",
+  "param",
+  "source",
+  "track",
+  "wbr"
+];
+
 function print(path, options, print) {
   const node = path.getValue();
 
@@ -22,18 +40,23 @@ function print(path, options, print) {
       return concat([printChildren(path, options, print, "body"), hardline]);
     }
     case "ElementNode": {
+      const isVoid = voidTags.includes(node.tag);
       const lineType = hardline;
 
-      return concat([
-        group(concat(["<", node.tag, ">"])),
-        group(
-          concat([
-            indent(concat([lineType, printChildren(path, options, print)])),
-            lineType,
-            concat(["</", node.tag, ">"])
-          ])
-        )
-      ]);
+      if (isVoid) {
+        return group(concat(["<", node.tag, " />"]));
+      } else {
+        return concat([
+          group(concat(["<", node.tag, ">"])),
+          group(
+            concat([
+              indent(concat([lineType, printChildren(path, options, print)])),
+              lineType,
+              concat(["</", node.tag, ">"])
+            ])
+          )
+        ]);
+      }
     }
     case "BlockStatement": {
       return "[BlockStatement]";
