@@ -846,6 +846,19 @@ printWidth: 80
 <p>
   a {{foo}} b
 </p>
+
+<pre>
+
+	this should be ignored
+
+	<p>
+
+		as should this
+
+	</p>
+
+</pre>
+
 =====================================output=====================================
 <div class="attribute" {{modifier}} {{!-- comment --}}>
   Hello
@@ -882,6 +895,17 @@ printWidth: 80
 <p>
   a {{foo}} b
 </p>
+<pre>
+
+	this should be ignored
+
+	<p>
+
+		as should this
+
+	</p>
+
+</pre>
 ================================================================================
 `;
 
@@ -936,6 +960,19 @@ singleQuote: true
 <p>
   a {{foo}} b
 </p>
+
+<pre>
+
+	this should be ignored
+
+	<p>
+
+		as should this
+
+	</p>
+
+</pre>
+
 =====================================output=====================================
 <div class="attribute" {{modifier}} {{!-- comment --}}>
   Hello
@@ -972,6 +1009,17 @@ singleQuote: true
 <p>
   a {{foo}} b
 </p>
+<pre>
+
+	this should be ignored
+
+	<p>
+
+		as should this
+
+	</p>
+
+</pre>
 ================================================================================
 `;
 

@@ -522,7 +522,7 @@ function clean(ast, newObj) {
 }
 
 function shouldIgnore(path) {
-  return hasPreviousIgnoreComment(path) || isWithinIgnoreRegion(path);
+  return hasPreviousIgnoreComment(path) || isWithinIgnoreRegion(path) || isPreTag(path.getValue());
 }
 
 function hasPreviousIgnoreComment(path) {
@@ -553,6 +553,10 @@ function isWithinIgnoreRegion(path) {
 
 function isMustacheCommentStatement(node) {
   return node && node.type === "MustacheCommentStatement";
+}
+
+function isPreTag(node) {
+  return node && node.type === "ElementNode" && node.tag === 'pre';
 }
 
 function isIgnoreFileComment(node) {
