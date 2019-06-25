@@ -86,6 +86,7 @@ function print(path, options, print) {
 
       if (isPreTag(path.getValue())) {
         let original = getOriginalNodeValue(n, options);
+        console.log('SKIPPING <pre>', original);
         return concat([original]);
       }
 
