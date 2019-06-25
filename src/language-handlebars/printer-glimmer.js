@@ -84,6 +84,11 @@ function print(path, options, print) {
         return concat([original.trim()]);
       }
 
+      if (isPreTag(path.getValue())) {
+        let original = getOriginalNodeValue(n, options);
+        return concat([original]);
+      }
+
       const tagFirstChar = n.tag[0];
       const isLocal = n.tag.indexOf(".") !== -1;
       const isGlimmerComponent =
@@ -522,7 +527,7 @@ function clean(ast, newObj) {
 }
 
 function shouldIgnore(path) {
-  return hasPreviousIgnoreComment(path) || isWithinIgnoreRegion(path) || isPreTag(path.getValue());
+  return hasPreviousIgnoreComment(path) || isWithinIgnoreRegion(path);
 }
 
 function hasPreviousIgnoreComment(path) {
