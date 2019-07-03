@@ -84,7 +84,7 @@ function print(path, options, print) {
         return concat([original.trim()]);
       }
 
-      if (isPreTag(path.getValue())) {
+      if (isPreTag(path.getValue()) || isSvgTag(path.getValue())) {
         let original = getOriginalNodeValue(n, options);
         return original;
       }
@@ -562,6 +562,10 @@ function isMustacheCommentStatement(node) {
 
 function isPreTag(node) {
   return node && node.type === "ElementNode" && node.tag === 'pre';
+}
+
+function isSvgTag(node) {
+  return node && node.type === "ElementNode" && node.tag === 'svg';
 }
 
 function isIgnoreFileComment(node) {
